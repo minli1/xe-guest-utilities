@@ -1,7 +1,6 @@
 package guestmetric
 
 import (
-	xenstoreclient "../xenstoreclient"
 	"bufio"
 	"bytes"
 	"fmt"
@@ -11,6 +10,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	xenstoreclient "../xenstoreclient"
 )
 
 type Collector struct {
@@ -199,6 +200,9 @@ func (c *Collector) CollectDisk() (GuestMetric, error) {
 				}
 			}
 			real_dev := ""
+			if !strings.Contains(disk, "xv") {
+				continue
+			}
 			if c.Client != nil {
 				nodename, err := readSysfs(fmt.Sprintf("/sys/block/%s/device/nodename", disk))
 				if err != nil {
